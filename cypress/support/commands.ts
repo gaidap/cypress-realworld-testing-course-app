@@ -39,9 +39,20 @@
 declare namespace Cypress {
   interface Chainable {
     getByDataTest(dataTestAttribute: string): Chainable<JQuery<HTMLElement>>
+    assertNextLesson(nextLessonPath: string): Chainable<JQuery<HTMLElement>>
+    chooseAnswer(answerIndex: number): Chainable<JQuery<HTMLElement>>
   }
 }
 
 Cypress.Commands.add("getByDataTest", (selector: string) => {
   return cy.get(`[data-test=${selector}]`)
+})
+
+Cypress.Commands.add("assertNextLesson", (nextLessonPath: string) => {
+  cy.getByDataTest("next-lesson-button").should("exist").click()
+  cy.location("pathname").should("eq", nextLessonPath)
+})
+
+Cypress.Commands.add("chooseAnswer", (answerIndex: number) => {
+  cy.getByDataTest(`challenge-answer-${answerIndex}`).click()
 })
